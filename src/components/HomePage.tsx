@@ -1,8 +1,7 @@
-
 import { useEffect, useRef } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import * as anime from 'animejs';
+import anime from 'animejs';
 
 interface HomePageProps {
   onShowLogin: () => void;
@@ -16,37 +15,37 @@ export function HomePage({ onShowLogin, onShowSignup }: HomePageProps) {
 
   useEffect(() => {
     // Hero section animation
-    anime.default({
+    anime({
       targets: heroRef.current?.children,
       translateY: [50, 0],
       opacity: [0, 1],
-      delay: anime.default.stagger(200),
+      delay: anime.stagger(200),
       duration: 1000,
       easing: 'easeOutExpo'
     });
 
     // Features animation
-    anime.default({
+    anime({
       targets: featuresRef.current?.children,
       scale: [0.8, 1],
       opacity: [0, 1],
-      delay: anime.default.stagger(150, { start: 600 }),
+      delay: anime.stagger(150, { start: 600 }),
       duration: 800,
       easing: 'easeOutBack'
     });
 
     // Stats animation
-    anime.default({
+    anime({
       targets: statsRef.current?.children,
       translateX: [-100, 0],
       opacity: [0, 1],
-      delay: anime.default.stagger(100, { start: 1200 }),
+      delay: anime.stagger(100, { start: 1200 }),
       duration: 700,
       easing: 'easeOutExpo'
     });
 
     // Floating animation for cards
-    anime.default({
+    anime({
       targets: '.floating-card',
       translateY: [-10, 10],
       duration: 3000,
