@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 import { LoginPage } from '@/components/LoginPage';
 import { RoleSelector } from '@/components/RoleSelector';
 import { MainWorkspace } from '@/components/MainWorkspace';
+import { HomePage } from '@/components/HomePage';
 import { ThemeProvider } from '@/components/ThemeProvider';
 
 type User = {
@@ -14,6 +15,8 @@ type User = {
 const Index = () => {
   const [user, setUser] = useState<User | null>(null);
   const [showRoleSelector, setShowRoleSelector] = useState(false);
+  const [showLogin, setShowLogin] = useState(false);
+  const [showSignup, setShowSignup] = useState(false);
 
   useEffect(() => {
     // Check if user is already logged in (localStorage simulation)
@@ -32,6 +35,8 @@ const Index = () => {
     const newUser = { id: '1', email };
     setUser(newUser);
     setShowRoleSelector(true);
+    setShowLogin(false);
+    setShowSignup(false);
     localStorage.setItem('qa-assistant-user', JSON.stringify(newUser));
   };
 
@@ -47,13 +52,38 @@ const Index = () => {
   const handleLogout = () => {
     setUser(null);
     setShowRoleSelector(false);
+    setShowLogin(false);
+    setShowSignup(false);
     localStorage.removeItem('qa-assistant-user');
   };
+
+  const handleShowLogin = () => {
+    setShowLogin(true);
+    setShowSignup(false);
+  };
+
+  const handleShowSignup = () => {
+    setShowSignup(true);
+    setShowLogin(false);
+  };
+
+  const handleBackToHome = () => {
+    setShowLogin(false);
+    setShowSignup(false);
+  };
+
+  if (showLogin || showSignup) {
+    return (
+      <ThemeProvider>
+        <LoginPage onLogin={handleLogin} onBack={handleBackToHome} />
+      </ThemeProvider>
+    );
+  }
 
   if (!user) {
     return (
       <ThemeProvider>
-        <LoginPage onLogin={handleLogin} />
+        <HomePage onShowLogin={handleShowLogin} onShowSignup={handleShowSignup} />
       </ThemeProvider>
     );
   }
@@ -68,7 +98,7 @@ const Index = () => {
 
   return (
     <ThemeProvider>
-      <MainWorkspace user={user} onLogout={handleLogout} />
+      <MainWorkspace user={user as User & { role: 'developer' | 'tester' | 'po' }} onLogout={handleLogout} />
     </ThemeProvider>
   );
 };
